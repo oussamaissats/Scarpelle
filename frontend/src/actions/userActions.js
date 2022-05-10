@@ -193,7 +193,6 @@ localStorage.setItem('userInfo', JSON.stringify(data));
       dispatch({ type: USER_UPDATE_FAIL, payload: message });
     }
   };
-
   export const listTopSellers = () => async (dispatch) => {
     dispatch({ type: USER_TOPSELLERS_LIST_REQUEST });
     try {

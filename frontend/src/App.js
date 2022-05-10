@@ -1,4 +1,4 @@
-import React/*, { useEffect, useState } */ from 'react' ;
+import React, { useEffect, useState }  from 'react' ;
 import {BrowserRouter , Route , Link } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
@@ -20,20 +20,21 @@ import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
-/*import SellerRoute from './components/SellerRoute';*/
-import SellerScreen from './screens/SellerScreen';
-//import SearchBox from './components/SearchBox';
-//import SearchScreen from './screens/SearchScreen';
 import SellerRoute from './components/SellerRoute';
-/*import { listProductCategories } from './actions/productActions';
+import SellerScreen from './screens/SellerScreen';
+
+
+//import { listProductCategories } from './actions/productActions';
 import LoadingBox from './components/LoadingBox';
-import MessageBox from './components/MessageBox';*/
+import MessageBox from './components/MessageBox';
+import SearchBox from './components/SearchBox';
+import SearchScreen from './screens/SearchScreen';
 
 
 function App() {
  const cart = useSelector(state => state.cart)
  const {cartItems} = cart; 
- //const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+ const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
  const userSignin = useSelector((state) => state.userSignin);
  const  {userInfo} = userSignin;
  const dispatch = useDispatch();
@@ -42,15 +43,15 @@ function App() {
 
  };
 
- /*const productCategoryList = useSelector((state) => state.productCategoryList);
+ const productCategoryList = useSelector((state) => state.productCategoryList);
  const {
    loading: loadingCategories,
    error: errorCategories,
    categories,
  } = productCategoryList;
  useEffect(() => {
-   dispatch(listProductCategories());
- }, [dispatch]);*/
+   //dispatch(listProductCategories());
+ }, [dispatch]);
 
   return (
     <BrowserRouter>
@@ -58,7 +59,13 @@ function App() {
     <header className="row">
   
       <div>
-  
+     <button
+              type="button"
+              className="open-sidebar"
+              onClick={() => setSidebarIsOpen(true)}
+            >
+              <i className="fa fa-bars"></i>
+            </button>
           <Link className="brand" to="/">Scarpelle.tn</Link>
       </div>
 
@@ -146,7 +153,36 @@ function App() {
    )}
       </div>
     </header>
-
+    <aside className={sidebarIsOpen ? 'open' : ''}>
+          <ul className="categories">
+            <li>
+              <strong>Categories</strong>
+              <button
+                onClick={() => setSidebarIsOpen(false)}
+                className="close-sidebar"
+                type="button"
+              >
+                <i className="fa fa-close"></i>
+              </button>
+            </li>
+            {loadingCategories ? (
+              <LoadingBox></LoadingBox>
+            ) : errorCategories ? (
+              <MessageBox variant="danger">{errorCategories}</MessageBox>
+            ) : (
+              categories.map((c) => (
+                <li key={c}>
+                  <Link
+                    to={`/search/category/${c}`}
+                    onClick={() => setSidebarIsOpen(false)}
+                  >
+                    {c}
+                  </Link>
+                </li>
+              ))
+            )}
+          </ul>
+        </aside>
    
 
     <main>
@@ -164,6 +200,7 @@ function App() {
       <Route path="/payment" component={PaymentMethodScreen}></Route>
       <Route path="/placeorder" component={PlaceOrderScreen}></Route>
       <Route path="/order/:id" component={OrderScreen}></Route>
+      
       <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
       
       <Route path="/product/:id" component={ProductScreen} exact></Route>

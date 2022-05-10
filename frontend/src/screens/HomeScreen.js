@@ -32,14 +32,15 @@ const {
 
       
     <div>
-      <h2>Meilleurs vendeurs</h2>
+
+<h2>Top Sellers</h2>
       {loadingSellers ? (
         <LoadingBox></LoadingBox>
       ) : errorSellers ? (
         <MessageBox variant="danger">{errorSellers}</MessageBox>
       ) : (
         <>
-          {sellers.length === 0 && <MessageBox>Aucun vendeur</MessageBox>}
+          {sellers.length === 0 && <MessageBox>Vendeur invalide</MessageBox>}
           <Carousel showArrows autoPlay showThumbs={false}>
             {sellers.map((seller) => (
               <div key={seller._id}>
@@ -52,7 +53,8 @@ const {
           </Carousel>
         </>
       )}
-      <h2>Les meilleurs produits</h2>
+      <h2>Meilleur Produit</h2>
+     
       {loading? (
       <LoadingBox></LoadingBox>
       ): error? (
@@ -60,16 +62,14 @@ const {
       <MessageBox variant="danger">{error}</MessageBox>
     ):(
 
-    <div className="row center">
-      
-      {products?.map((product) => (
-
-     
-<Product key={product._id} product={product}></Product>
-
-
-))}   
+      <>
+      {products.length === 0 && <MessageBox>Aucun Produit</MessageBox>}
+      <div className="row center">
+        {products.map((product) => (
+          <Product key={product._id} product={product}></Product>
+        ))}
       </div>
+    </>
 
     )}
 

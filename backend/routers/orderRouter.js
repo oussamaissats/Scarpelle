@@ -8,7 +8,6 @@ const orderRouter = express.Router();
 orderRouter.get(
   '/',
   isAuth,
-  isAdmin,
   isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
     
@@ -65,12 +64,14 @@ orderRouter.get(
     if (order) {
       res.send(order);
     } else {
-      res.status(404).send({ message: 'Order Not Found' });
+      res.status(404).send({ message: 'commande indefine' });
     }
   })
 );
 
-orderRouter.put('/:id/pay', isAuth , expressAsyncHandler(async(req, res) => {
+orderRouter.put('/:id/pay',
+ isAuth , 
+ expressAsyncHandler(async(req, res) => {
 
 const oreder = await Order.findById(req.params.id); 
 if (order){
@@ -101,7 +102,7 @@ orderRouter.delete(
     const order = await Order.findById(req.params.id);
     if (order) {
       const deleteOrder = await order.remove();
-      res.send({ message: 'Order Supprimé', order: deleteOrder });
+      res.send({ message: 'commande Supprimé', order: deleteOrder });
     } else {
       res.status(404).send({ message: 'Commande Invalide' });
     }

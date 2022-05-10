@@ -56,11 +56,26 @@ const addToCartHandler = ()  => {
 
 <ul>
 
+<li>
+                    Vendeur{' '}
+                    <h2>
+                      <Link to={`/seller/${product?.seller?._id}`}>
+                        {product?.seller?.name}
+                      </Link>
+                    </h2>
+                    <Rating
+                      rating={product?.seller?.rating}
+                      numReviews={product?.seller?.numReviews}
+                    ></Rating>
+                  </li>
 
+<li>
     <div className="row">
-<div>Prix: </div>
+<div>Prix:{' '} </div>
 <div className="price">{product.price}DT</div>
     </div>
+
+</li>
 
 
 <li>

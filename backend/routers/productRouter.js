@@ -9,33 +9,24 @@ const productRouter = express.Router();
 productRouter.get(
   '/',
   expressAsyncHandler(async (req, res) => {
-    //const name = req.query.name || '';
-    //const category = req.query.category || '';
+    const name = req.query.name || '';
+    const category = req.query.category || '';
     const seller = req.query.seller || '';
-    //const nameFilter = name ? { name: { $regex: name, $options: 'i' } } : {};
     const sellerFilter = seller ? { seller } : {};
-    ///const categoryFilter = category ? { category } : {};
-    /*const products = await Product.find({
-      ...sellerFilter,
-      ...nameFilter,
-      ...categoryFilter,f
-    }).populate('seller', 'seller.name seller.logo');*/
-
-    const products = await Product.find({ ...sellerFilter }).populate(
-      'seller',
-      'seller.name seller.logo'
-    );
+    const categoryFilter = category ? { category } : {};
+    const products = await Product.find({
+       ...sellerFilter ,
+       ...nameFilter,
+       ...categoryFilter,
+      
+      }).populate('seller','seller.name seller.logo');
+     
     res.send(products);
-  })
+      })
 );
 
-/*productRouter.get(
-  '/categories',
-  expressAsyncHandler(async (req, res) => {
-    const categories = await Product.find().distinct('category');
-    res.send(categories);
-  })
-);*/
+    
+
 
 productRouter.get(
   '/seed',
@@ -45,6 +36,16 @@ productRouter.get(
     res.send({createdProducts});
   })
 );
+
+productRouter.get(
+  '/categories',
+  expressAsyncHandler(async (req, res) => {
+    const categories = await Product.find().distinct('category');
+    res.send(categories);
+  })
+);
+
+
 
 productRouter.get(
   '/:id',
@@ -64,20 +65,19 @@ productRouter.get(
 productRouter.post(
   '/',
   isAuth,
-  isAdmin,
   isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
     const product = new Product({
-      name: 'Marroni ' + Date.now(),
+      name: 'STAU MARRON ' + Date.now(),
       seller: req.user._id,
       image: '/images/p7.jpg',
-      price: 90,
+      price: 65,
       category: 'Sport',
       brand: 'Scarpelle',
-      countInStock: 3,
+      countInStock: 20,
       rating: 4,
       numReviews: 0,
-      description: 'sample description',
+      description: 'Matière: 100% cuir extérieur et intérieur Semelle: Italienne qualité premium Pointures: 39 40 41 42 43 44 45',
     });
     const createdProduct = await product.save();
     res.send({ message: 'Product crée', product: createdProduct });
@@ -89,7 +89,6 @@ productRouter.post(
 productRouter.put(
   '/:id',
   isAuth,
-  isAdmin,
   isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
